@@ -1,6 +1,14 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Webapi.BookOperations.CreateBook;
+using Webapi.BookOperations.DeleteBook;
+using WebApi.BookOperations.GetBookDetail;
+using WebApi.BookOperations.GetBooks;
+using WebApi.BookOperations.UpdateBook;
 using WebApi.DBOperations;
+using static Webapi.BookOperations.CreateBook.CreateBookCommand;
+using static WebApi.BookOperations.GetBookDetail.GetBookDetailQuery;
+using static WebApi.BookOperations.UpdateBook.UpdateBookCommand;
 
 namespace WebApi.AddControllers{
     [ApiController]
@@ -13,17 +21,30 @@ namespace WebApi.AddControllers{
             _context =context;
         }
         [HttpGet]
-        public List<Book> GetBooks()
+        public IActionResult GetBooks()
         {
-            var bookList = _context.Books.OrderBy(x=> x.Id).ToList<Book>();
-            return bookList;
+            GetBooksQuery query = new GetBooksQuery(_context);
+            var result = query.Handle();
+            return Ok(result);
 
         }
         [HttpGet("{id}")]
-        public Book GetById(int id)
+        public IActionResult GetById(int id)
         {
-            var book = _context.Books.Where(book => book.Id == id).SingleOrDefault();
-            return book;
+            BookDetailViewModel result;
+            try
+            {
+                GetBookDetailQuery query = new GetBookDetailQuery(_context);
+                query.BookId = id;
+                result = query.Handle();
+
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+
+            }
+            return Ok(result);
 
         }
         //  [HttpGet]
@@ -35,44 +56,62 @@ namespace WebApi.AddControllers{
         // }
         //post
         [HttpPost]
-        public IActionResult AddBook([FromBody] Book newBook){
-            var book = _context.Books.SingleOrDefault(X=>X.Title == newBook.Title);
-            if(book is not null)
-                return BadRequest();
+        public IActionResult AddBook([FromBody] CreateBookModel newBook)
+        {
+             CreateBookCommand command = new CreateBookCommand(_context);
+            try{
+                
+                command.Model = newBook;
+                command.Handle();
 
-            _context.Books.Add(newBook);
-            _context.SaveChanges();
-            return Ok();
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+
+            }
+           return Ok();
+           
         }         
 
          
         
         //put
         [HttpPut("{id}")]
-        public IActionResult UpdateBook(int id,[FromBody] Book uptadedBook)
+        public IActionResult UpdateBook(int id,[FromBody] UpdateBookModel uptadedBook)
         {
-            var book = _context.Books.SingleOrDefault(X=>X.Id == id);
-            if(book is null)
-                return BadRequest();
-            book.GenreId = uptadedBook.GenreId != default ? uptadedBook.GenreId : book.GenreId;
-            book.PageCount = uptadedBook.PageCount != default ? uptadedBook.PageCount : book.PageCount;
-            book.PublishDate = uptadedBook.PublishDate != default ? uptadedBook.PublishDate : book.PublishDate;
-            book.Title = uptadedBook.Title != default ? uptadedBook.Title : book.Title;
-          
-            _context.SaveChanges();
+            try
+            {
+                UpdateBookCommand command = new UpdateBookCommand(_context);
+                command.BookId = id;
+                command.Model = uptadedBook;
+                command.Handle();
 
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+     
             return Ok();
+          
 
 
         }
         [HttpDelete("{id}")]
         public IActionResult DeleteBook (int id)
         {
-            var book = _context.Books.SingleOrDefault(X=>X.Id == id);
-            if(book is null)
-                return BadRequest();
-            _context.Books.Remove(book);
-            _context.SaveChanges();
+            try
+            {
+                DeleteBookCommand command = new DeleteBookCommand(_context);
+                command.BookId = id;
+                command.Handle();
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+       
             return Ok();
 
         }  
