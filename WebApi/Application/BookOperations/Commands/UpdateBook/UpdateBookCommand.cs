@@ -1,10 +1,11 @@
 using System.Linq;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using WebApi;
 using WebApi.Common;
 using WebApi.DBOperations;
 
-namespace WebApi.BookOperations.UpdateBook
+namespace Webapi.Application.BookOperations.Commands.UpdateBook
 {
     public class UpdateBookCommand
     {

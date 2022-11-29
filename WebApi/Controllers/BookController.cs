@@ -3,19 +3,15 @@ using AutoMapper;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
-using Webapi.BookOperations.CreateBook;
-using Webapi.BookOperations.DeleteBook;
-using WebApi.BookOperations.GetBookDetail;
-using WebApi.BookOperations.GetBooks;
-using WebApi.BookOperations.UpdateBook;
-using WebApi.CreateBook;
+using Webapi.Application.BookOperations.Commands.CreateBook;
+using Webapi.Application.BookOperations.Commands.DeleteBook;
+using Webapi.Application.BookOperations.Commands.UpdateBook;
+using WebApi.Application.Queries.BookOperations.GetBookDetail;
+using WebApi.Application.Queries.BookOperations.GetBooks;
 using WebApi.DBOperations;
-using WebApi.DeleteBook;
-using WebApi.UpdateBook;
-using static Webapi.BookOperations.CreateBook.CreateBookCommand;
-using static WebApi.BookOperations.GetBookDetail.GetBookDetailQuery;
-using static WebApi.BookOperations.UpdateBook.UpdateBookCommand;
-
+using static Webapi.Application.BookOperations.Commands.CreateBook.CreateBookCommand;
+using static Webapi.Application.BookOperations.Commands.UpdateBook.UpdateBookCommand;
+using static WebApi.Application.Queries.BookOperations.GetBookDetail.GetBookDetailQuery;
 
 namespace WebApi.AddControllers{
     [ApiController]
@@ -41,20 +37,15 @@ namespace WebApi.AddControllers{
         public IActionResult GetById(int id)
         {
             BookDetailViewModel result;
-            try
-            {
-                GetBookDetailQuery query = new GetBookDetailQuery(_context , _mapper);
-                query.BookId = id;
-                GetBookDetailQueryValidator validator = new GetBookDetailQueryValidator();
-                validator.ValidateAndThrow(query);
-                result = query.Handle();
+        
+            GetBookDetailQuery query = new GetBookDetailQuery(_context , _mapper);
+            query.BookId = id;
+            GetBookDetailQueryValidator validator = new GetBookDetailQueryValidator();
+            validator.ValidateAndThrow(query);
+            result = query.Handle();
 
-            }
-            catch(Exception ex)
-            {
-                return BadRequest(ex.Message); 
-
-            }
+        
+        
             return Ok(result);
 
         }
@@ -62,28 +53,23 @@ namespace WebApi.AddControllers{
         [HttpPost]
         public IActionResult AddBook([FromBody] CreateBookModel newBook)
         {
-             CreateBookCommand command = new CreateBookCommand(_context, _mapper);
-            try{
-                
-                command.Model = newBook;
-                CreateBookCommandValidator validator = new CreateBookCommandValidator();
-                ValidationResult result =  validator.Validate(command); 
-                validator.ValidateAndThrow(command);
-                command.Handle();
-                // if(!result.IsValid ){
-                //     foreach(var item in result.Errors){
-                //         Console.WriteLine("Özellik " + item.PropertyName + "- Error Message: " +  item.ErrorMessage);
-                //     }
-                // }
-                // else
-                //     command.Handle();
+            CreateBookCommand command = new CreateBookCommand(_context, _mapper);
+        
+            command.Model = newBook;
+            CreateBookCommandValidator validator = new CreateBookCommandValidator();
+            ValidationResult result =  validator.Validate(command); 
+            validator.ValidateAndThrow(command);
+            command.Handle();
+            // if(!result.IsValid ){
+            //     foreach(var item in result.Errors){
+            //         Console.WriteLine("Özellik " + item.PropertyName + "- Error Message: " +  item.ErrorMessage);
+            //     }
+            // }
+            // else
+            //     command.Handle();
 
-            }
-            catch(Exception ex)
-            {
-                return BadRequest(ex.Message);
-
-            }
+        // }
+             
            return Ok();
            
         }         
@@ -94,22 +80,15 @@ namespace WebApi.AddControllers{
         [HttpPut("{id}")]
         public IActionResult UpdateBook(int id,[FromBody] UpdateBookModel uptadedBook)
         {
-            try
-            {
-                UpdateBookCommand command = new UpdateBookCommand(_context,_mapper);
-                command.BookId = id;
-                command.Model = uptadedBook;
-                UpdateBookCommandValidator validator = new UpdateBookCommandValidator();
-                ValidationResult result =  validator.Validate(command); 
-                validator.ValidateAndThrow(command);
-                
-                command.Handle();
-
-            }
-            catch(Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+           
+            UpdateBookCommand command = new UpdateBookCommand(_context,_mapper);
+            command.BookId = id;
+            command.Model = uptadedBook;
+            UpdateBookCommandValidator validator = new UpdateBookCommandValidator();
+            ValidationResult result =  validator.Validate(command); 
+            validator.ValidateAndThrow(command);
+            
+            command.Handle();
      
             return Ok();
           
@@ -119,19 +98,13 @@ namespace WebApi.AddControllers{
         [HttpDelete("{id}")]
         public IActionResult DeleteBook (int id)
         {
-            try
-            {
-                DeleteBookCommand command = new DeleteBookCommand(_context);
-                command.BookId = id;
-                DeleteBookCommandValidator validator = new DeleteBookCommandValidator();
-                validator.ValidateAndThrow(command);
-                command.Handle();
-            }
-            catch(Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-       
+           
+            DeleteBookCommand command = new DeleteBookCommand(_context);
+            command.BookId = id;
+            DeleteBookCommandValidator validator = new DeleteBookCommandValidator();
+            validator.ValidateAndThrow(command);
+            command.Handle();
+
             return Ok();
 
         }  

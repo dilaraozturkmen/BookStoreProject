@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using WebApi.Entities;
 
 namespace WebApi.DBOperations
 {
@@ -12,6 +13,20 @@ namespace WebApi.DBOperations
                 {
                     return;
                 }
+                context.Genres.AddRange(
+                    new Genre{
+                        id = 1,
+                        Name = "Personel Growth"
+                    },
+                    new Genre{
+                        id = 2,
+                        Name = "Science Fiction"
+                    },
+                    new Genre{
+                        id = 3,
+                        Name = "Roamence"
+                    }
+                );
                 context.Books.AddRange(
                     new Book
                     {
@@ -43,6 +58,7 @@ namespace WebApi.DBOperations
 
 
                     }
+                    
                 );
                 context.SaveChanges();
             }
