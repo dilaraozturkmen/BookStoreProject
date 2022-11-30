@@ -60,15 +60,6 @@ namespace WebApi.AddControllers{
             ValidationResult result =  validator.Validate(command); 
             validator.ValidateAndThrow(command);
             command.Handle();
-            // if(!result.IsValid ){
-            //     foreach(var item in result.Errors){
-            //         Console.WriteLine("Özellik " + item.PropertyName + "- Error Message: " +  item.ErrorMessage);
-            //     }
-            // }
-            // else
-            //     command.Handle();
-
-        // }
              
            return Ok();
            

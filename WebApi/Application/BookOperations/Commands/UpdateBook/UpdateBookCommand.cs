@@ -24,11 +24,6 @@ namespace Webapi.Application.BookOperations.Commands.UpdateBook
             if(book is null)
                 throw new InvalidOperationException("Kitap Bulanamadı");
            _mapper.Map(Model,book);
-        
-            // book.GenreId = Model.GenreId != default ? Model.GenreId : book.GenreId;
-            // // book.PageCount = uptadedBook.PageCount != default ? Model.PageCount : book.PageCount;
-            // // book.PublishDate = uptadedBook.PublishDate != default ? uptadedBook.PublishDate : book.PublishDate;
-            // book.Title = Model.Title != default ? Model.Title : book.Title;
           
             _dbContext.SaveChanges();
 
@@ -39,6 +34,7 @@ namespace Webapi.Application.BookOperations.Commands.UpdateBook
         
         public string? Title { get; set; }
         public int GenreId { get; set; }
+        public int AuthorId { get; set; }
         public int PageCount { get; set; }
         public DateTime PublishDate { get; set; }
    

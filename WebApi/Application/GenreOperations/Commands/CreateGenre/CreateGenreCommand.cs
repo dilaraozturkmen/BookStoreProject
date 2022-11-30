@@ -1,3 +1,4 @@
+using AutoMapper;
 using WebApi.DBOperations;
 using WebApi.Entities;
 
@@ -7,9 +8,11 @@ namespace WebApi.Application.GenreOperations.CreateBook
     {
         public CreateGenreModel Model {get; set;}
         public readonly BookStoreDbContext _context;
-        public CreateGenreCommand(BookStoreDbContext context)
+        public readonly IMapper _mapper;
+        public CreateGenreCommand(BookStoreDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
         public void Handle()
         {

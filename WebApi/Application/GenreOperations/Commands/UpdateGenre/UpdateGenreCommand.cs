@@ -1,3 +1,4 @@
+using AutoMapper;
 using WebApi.DBOperations;
 using WebApi.Entities;
 
@@ -8,10 +9,12 @@ namespace WebApi.Application.GenreOperations.UpdateBook
         public int GenreId { get; set; }
         public UpdateGenreModel Model  { get; set; }
         public readonly BookStoreDbContext _context;
+        public readonly IMapper _mapper;
 
-        public UpdateGenreCommand(BookStoreDbContext context)
+        public UpdateGenreCommand(BookStoreDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
         public void Handle()
         {
