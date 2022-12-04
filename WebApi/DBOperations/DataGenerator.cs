@@ -34,18 +34,18 @@ namespace WebApi.DBOperations
                         Surname ="Ries ",
                         DateOfBirth = new DateTime(1978,03,05)
 
-                    }
-                );
-                context.Authors.AddRange(
+                    },
+               
+                
                     new Author{
                         id = 2,
                         Name = "Charlotte",
                         Surname ="Perkins Gilman",
                         DateOfBirth = new DateTime(1860,07,03)
 
-                    }
-                );
-                context.Authors.AddRange(
+                    },
+               
+                
                     new Author{
                         id = 3,
                         Name = "Frank ",
