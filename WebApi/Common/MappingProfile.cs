@@ -9,6 +9,8 @@ using WebApi.Application.UpdateAuthor;
 using WebApi.Entities;
 using static Webapi.Application.BookOperations.Commands.CreateBook.CreateBookCommand;
 using static Webapi.Application.BookOperations.Commands.UpdateBook.UpdateBookCommand;
+using static Webapi.Application.UserOperations.Commnads.CreateUser.CreateUserCommand;
+
 using static WebApi.Application.Queries.BookOperations.GetBookDetail.GetBookDetailQuery;
 
 namespace WebApi.Common
@@ -27,6 +29,7 @@ namespace WebApi.Common
              CreateMap<Author , AuthorDetailViewModel>();
              CreateMap<Author , AuthorViewModel>();
              CreateMap<UpdateAuthorModel , Author>();
+             CreateMap<CreateUserModel , User>();
 
         }
 
